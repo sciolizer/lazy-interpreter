@@ -17,8 +17,9 @@ import System.IO.Unsafe
  - This is an interpreter for a pure, lazy, dynamically typed, functional
  - language. It implements objects (labelled product types),
  - switchables (labelled sum types), switch statements (a very limited
- - form of pattern matching), let statements, let-switchtags, lists, maybes, and
- - even monadic return and bind for the write and IO monad, and it's just over 400
+ - form of pattern matching), let statements, let-switchtags (a substitute
+ - for ADTs), lists as primitives, maybes as primitives, and
+ - even monadic return and bind for the IO monad, and all this just under 400
  - lines.
  -
  - Some of the ADTs have lots and lots of constructors. This approach
@@ -341,7 +342,7 @@ applyValue val arg =
         _ -> error "type mismatch; first arg of unfoldList is supposed to produce a maybe 2-tuple (2-tuple is an object with properties _1 and _2)"
 
     VOnly -> return $ VAction (Action "only" (return arg))
-    VAction _ -> error "io and write actions cannot be applied; use bind to see their effects"
+    VAction _ -> error "io actions cannot be applied; use bind to see their effects"
 
     VBind -> return $ VBind1 arg
     -- here is where io action effects actually occur
